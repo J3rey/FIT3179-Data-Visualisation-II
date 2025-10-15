@@ -1,0 +1,104 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Dynamic pie chart showing top 8 countries' attendance by year with year filter.",
+  "title": {
+    "text": "Top 8 Countries' Attendance Over Years",
+    "anchor": "middle"
+  },
+  "width": 500,
+  "height": 400,
+  "data": { "url": "../data/top8_countries_attendance_over_years.csv" },
+  "params": [
+    {
+      "name": "selectedYear",
+      "value": 2016,
+      "bind": {
+        "input": "range",
+        "min": 1896,
+        "max": 2016,
+        "step": 4,
+        "name": "Year: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.Year == selectedYear"
+    }
+  ],
+  "mark": { "type": "arc", "tooltip": true, "outerRadius": 160 },
+  "encoding": {
+    "theta": {
+      "field": "Percentage_Attendance",
+      "type": "quantitative",
+      "stack": true
+    },
+    "color": {
+      "field": "Team",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "United States",
+          "France",
+          "Australia",
+          "Germany",
+          "Great Britain",
+          "Italy",
+          "Canada",
+          "Spain",
+          "Russia",
+          "Soviet Union",
+          "East Germany",
+          "West Germany",
+          "China",
+          "Japan",
+          "Brazil",
+          "Netherlands",
+          "Norway",
+          "Sweden",
+          "Switzerland",
+          "Belgium",
+          "Other"
+        ],
+        "range": [
+          "#e41a1c",
+          "#377eb8",
+          "#4daf4a",
+          "#984ea3",
+          "#ff7f00",
+          "#ffff33",
+          "#a65628",
+          "#f781bf",
+          "#66c2a5",
+          "#8da0cb",
+          "#e78ac3",
+          "#a6d854",
+          "#ffd92f",
+          "#e5c494",
+          "#b3b3b3",
+          "#fc8d62",
+          "#8dd3c7",
+          "#ffffb3",
+          "#bebada",
+          "#fb8072",
+          "#d9d9d9"
+        ]
+      },
+      "legend": {
+        "title": "Country/Team",
+        "symbolLimit": 0
+      }
+    },
+    "tooltip": [
+      { "field": "Team", "type": "nominal", "title": "Team" },
+      { "field": "Year", "type": "quantitative", "title": "Year" },
+      {
+        "field": "Percentage_Attendance",
+        "type": "quantitative",
+        "title": "Attendance (%)",
+        "format": ".2f"
+      }
+    ]
+  },
+  "view": { "stroke": "transparent" }
+}

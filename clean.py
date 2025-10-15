@@ -1,19 +1,41 @@
 import pandas as pd
 
-# Load your dataset
-df = pd.read_csv("athletes.csv")
+# Load dataset
+data = pd.read_csv("dataset_olympics.csv")
 
-# Count how many athletes are from each country
-country_counts = df['country'].value_counts().reset_index()
+# Drop rows without team or year
+data = data.dropna(subset=["Team", "Year"])
 
-# Rename columns for clarity
-country_counts.columns = ['Country', 'Number_of_Athletes']
+# Count number of athletes per team per year
+attendance = data.groupby(["Team", "Year"]).size().reset_index(name="Count")
 
-# Sort from highest to lowest
-country_counts = country_counts.sort_values(by='Number_of_Athletes', ascending=False)
+# Calculate total number of athletes each year
+year_total = attendance.groupby("Year")["Count"].sum().reset_index(name="Total")
 
-# Display top 10 countries
-print(country_counts.head(10))
+# Merge totals back to attendance data
+merged = pd.merge(attendance, year_total, on="Year")
 
-# Optionally export to CSV
-country_counts.to_csv("country_athlete_counts.csv", index=False)
+# Calculate percentage attendance per country
+merged["Percentage_Attendance"] = (merged["Count"] / merged["Total"]) * 100
+
+# Rank teams within each year by number of athletes
+merged["Rank"] = merged.groupby("Year")["Count"].rank(ascending=False, method="first")
+
+# Replace all ranks above 8 with 'Other' using vectorized assignment to avoid SettingWithCopyWarning
+merged.loc[merged["Rank"] > 8, "Team"] = "Other"
+
+# Regroup counts so that all "Other" entries are combined together and recompute percentages from counts
+final = merged.groupby(["Team", "Year"], as_index=False).agg({"Count": "sum", "Total": "first"})
+
+# Calculate percentage attendance per country from aggregated counts
+final["Percentage_Attendance"] = (final["Count"] / final["Total"]) * 100
+
+# Round to 2 decimal places and keep only the needed columns
+final["Percentage_Attendance"] = final["Percentage_Attendance"].round(2)
+final = final[["Team", "Year", "Percentage_Attendance"]]
+
+# Save cleaned dataset
+final.to_csv("top8_countries_attendance.csv", index=False)
+
+# Display first few rows
+print(final.head())

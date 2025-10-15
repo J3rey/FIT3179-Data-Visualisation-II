@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Pie Chart — Top 8 Countries by Year</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Top 8 Countries' Attendance Over Years</h1>
+    <div
+      style="
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      "
+    >
+      <div id="pie_chart_years"></div>
+    </div>
+
+    <script>
+      vegaEmbed("#pie_chart_years", "../js/pie_chart_years.json", {
+        actions: true,
+        renderer: "svg",
+      })
+        .then(function (result) {
+          // chart rendered
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>
