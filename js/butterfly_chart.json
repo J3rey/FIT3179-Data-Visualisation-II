@@ -1,0 +1,337 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A butterfly chart showing athlete age distribution by gender.",
+  "title": {
+    "text": "Athlete Age Distribution by Gender",
+    "fontSize": 18,
+    "fontWeight": "bold",
+    "anchor": "middle"
+  },
+  "height": 500,
+  "padding": 5,
+
+  "signals": [
+    { "name": "chartWidth", "value": 250 },
+    { "name": "chartPad", "value": 60 },
+    { "name": "width", "update": "2 * chartWidth + chartPad" },
+    {
+      "name": "selectedAgeGroups",
+      "value": [
+        "15-19",
+        "20-24",
+        "25-29",
+        "30-34",
+        "35-39",
+        "40-44",
+        "45-49",
+        "50-54",
+        "55-59",
+        "60-64",
+        "65-69"
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            "15-19",
+            "20-24",
+            "25-29",
+            "30-34",
+            "35-39",
+            "40-44",
+            "45-49",
+            "50-54",
+            "55-59",
+            "60-64",
+            "65-69"
+          ],
+          ["15-19", "20-24", "25-29"],
+          ["30-34", "35-39", "40-44"],
+          ["45-49", "50-54", "55-59"],
+          ["60-64", "65-69"],
+          ["15-19", "20-24", "25-29", "30-34", "35-39"],
+          ["40-44", "45-49", "50-54", "55-59", "60-64", "65-69"]
+        ],
+        "labels": [
+          "All Ages",
+          "Young (15-29)",
+          "Middle (30-44)",
+          "Mature (45-59)",
+          "Senior (60-69)",
+          "Under 40",
+          "Over 40"
+        ],
+        "name": "Age Groups: "
+      }
+    },
+    {
+      "name": "tooltip",
+      "value": {},
+      "on": [
+        { "events": "rect:mouseover", "update": "datum" },
+        { "events": "rect:mouseout", "update": "{}" }
+      ]
+    }
+  ],
+
+  "data": [
+    {
+      "name": "athletes",
+      "url": "../data/athletes_name_gender_age.csv",
+      "format": { "type": "csv", "parse": { "age": "number" } },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.age != null"
+        },
+        {
+          "type": "formula",
+          "as": "ageGroup",
+          "expr": "floor(datum.age / 5) * 5"
+        },
+        {
+          "type": "formula",
+          "as": "ageGroupLabel",
+          "expr": "datum.ageGroup + '-' + (datum.ageGroup + 4)"
+        },
+        {
+          "type": "filter",
+          "expr": "indexof(selectedAgeGroups, datum.ageGroupLabel) >= 0"
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["gender", "ageGroup", "ageGroupLabel"],
+          "fields": ["age"],
+          "ops": ["count"],
+          "as": ["count"]
+        }
+      ]
+    },
+    {
+      "name": "males",
+      "source": "athletes",
+      "transform": [{ "type": "filter", "expr": "datum.gender == 'Male'" }]
+    },
+    {
+      "name": "females",
+      "source": "athletes",
+      "transform": [{ "type": "filter", "expr": "datum.gender == 'Female'" }]
+    },
+    {
+      "name": "ageGroups",
+      "source": "athletes",
+      "transform": [
+        { "type": "aggregate", "groupby": ["ageGroup"] },
+        {
+          "type": "collect",
+          "sort": { "field": "ageGroup", "order": "ascending" }
+        }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "y",
+      "type": "band",
+      "range": [{ "signal": "height" }, 0],
+      "round": true,
+      "domain": { "data": "ageGroups", "field": "ageGroup", "sort": true }
+    },
+    {
+      "name": "c",
+      "type": "ordinal",
+      "domain": ["Male", "Female"],
+      "range": ["#6c4e97", "#d5855a"]
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "c",
+      "title": "Gender",
+      "orient": "top-right",
+      "encode": {
+        "symbols": {
+          "update": {
+            "fillOpacity": { "value": 0.6 },
+            "stroke": { "value": "transparent" }
+          }
+        },
+        "labels": {
+          "update": {
+            "fontSize": { "value": 12 },
+            "fill": { "value": "#000" }
+          }
+        },
+        "title": {
+          "update": {
+            "fontSize": { "value": 14 },
+            "fontWeight": { "value": "bold" }
+          }
+        }
+      }
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "text",
+      "interactive": false,
+      "from": { "data": "ageGroups" },
+      "encode": {
+        "enter": {
+          "x": { "signal": "chartWidth + chartPad / 2" },
+          "y": { "scale": "y", "field": "ageGroup", "band": 0.5 },
+          "text": { "signal": "datum.ageGroup + '-' + (datum.ageGroup + 4)" },
+          "baseline": { "value": "middle" },
+          "align": { "value": "center" },
+          "fill": { "value": "#000" }
+        }
+      }
+    },
+    {
+      "type": "group",
+
+      "encode": {
+        "update": {
+          "x": { "value": 0 },
+          "height": { "signal": "height" }
+        }
+      },
+
+      "scales": [
+        {
+          "name": "x",
+          "type": "linear",
+          "range": [{ "signal": "chartWidth" }, 0],
+          "nice": true,
+          "zero": true,
+          "domain": { "data": "athletes", "field": "count" }
+        }
+      ],
+
+      "axes": [
+        {
+          "orient": "bottom",
+          "scale": "x",
+          "format": "d",
+          "title": "Female Athletes"
+        }
+      ],
+
+      "marks": [
+        {
+          "type": "rect",
+          "from": { "data": "females" },
+          "encode": {
+            "enter": {
+              "x": { "scale": "x", "field": "count" },
+              "x2": { "scale": "x", "value": 0 },
+              "y": { "scale": "y", "field": "ageGroup" },
+              "height": { "scale": "y", "band": 1, "offset": -1 },
+              "fill": { "scale": "c", "field": "gender" },
+              "tooltip": {
+                "signal": "{'Gender': datum.gender, 'Age Group': datum.ageGroup + '-' + (datum.ageGroup + 4), 'Count': datum.count}"
+              }
+            },
+            "update": {
+              "fillOpacity": { "value": 0.6 }
+            },
+            "hover": {
+              "fillOpacity": { "value": 1 }
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": { "data": "females" },
+          "encode": {
+            "enter": {
+              "x": { "scale": "x", "field": "count", "offset": -5 },
+              "y": { "scale": "y", "field": "ageGroup", "band": 0.5 },
+              "text": { "signal": "datum.count" },
+              "align": { "value": "right" },
+              "baseline": { "value": "middle" },
+              "fill": { "value": "#000" },
+              "fontSize": { "value": 11 },
+              "fontWeight": { "value": "bold" }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+
+      "encode": {
+        "update": {
+          "x": { "signal": "chartWidth + chartPad" },
+          "height": { "signal": "height" }
+        }
+      },
+
+      "scales": [
+        {
+          "name": "x",
+          "type": "linear",
+          "range": [0, { "signal": "chartWidth" }],
+          "nice": true,
+          "zero": true,
+          "domain": { "data": "athletes", "field": "count" }
+        }
+      ],
+
+      "axes": [
+        {
+          "orient": "bottom",
+          "scale": "x",
+          "format": "d",
+          "title": "Male Athletes"
+        }
+      ],
+
+      "marks": [
+        {
+          "type": "rect",
+          "from": { "data": "males" },
+          "encode": {
+            "enter": {
+              "x": { "scale": "x", "field": "count" },
+              "x2": { "scale": "x", "value": 0 },
+              "y": { "scale": "y", "field": "ageGroup" },
+              "height": { "scale": "y", "band": 1, "offset": -1 },
+              "fill": { "scale": "c", "field": "gender" },
+              "tooltip": {
+                "signal": "{'Gender': datum.gender, 'Age Group': datum.ageGroup + '-' + (datum.ageGroup + 4), 'Count': datum.count}"
+              }
+            },
+            "update": {
+              "fillOpacity": { "value": 0.6 }
+            },
+            "hover": {
+              "fillOpacity": { "value": 1 }
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": { "data": "males" },
+          "encode": {
+            "enter": {
+              "x": { "scale": "x", "field": "count", "offset": 5 },
+              "y": { "scale": "y", "field": "ageGroup", "band": 0.5 },
+              "text": { "signal": "datum.count" },
+              "align": { "value": "left" },
+              "baseline": { "value": "middle" },
+              "fill": { "value": "#000" },
+              "fontSize": { "value": 11 },
+              "fontWeight": { "value": "bold" }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

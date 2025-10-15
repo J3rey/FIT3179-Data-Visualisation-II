@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Butterfly Chart — Athlete Age Distribution by Gender</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Athlete Age Distribution by Gender</h1>
+    <div
+      id="butterfly_chart"
+      style="width: 95%; max-width: 1000px; margin: 20px auto"
+    ></div>
+
+    <script>
+      // Embed the Vega spec (note: this is Vega v5, not Vega-Lite)
+      vegaEmbed("#butterfly_chart", "../js/butterfly_chart.json", {
+        actions: true,
+      })
+        .then(function (result) {
+          // chart rendered
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>
