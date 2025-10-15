@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Horizontal Stacked Bar Chart — Medals by Country</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">
+      Medals by Country — Horizontal Stacked Bar
+    </h1>
+    <div
+      id="horizontal_stacked_bar_chart"
+      style="width: 95%; max-width: 1400px; margin: 20px auto"
+    ></div>
+
+    <script>
+      // Embed the spec (the spec includes a bound countryFilter text input)
+      vegaEmbed(
+        "#horizontal_stacked_bar_chart",
+        "../js/horizontal_stacked_bar_chart.json",
+        { actions: true }
+      )
+        .then(function (result) {
+          // chart rendered
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>

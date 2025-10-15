@@ -8,7 +8,6 @@
   padding: 0;
 }
 
-/* Keep the old #vis for backward compatibility */
 #vis {
   position: fixed;
   top: 50%;

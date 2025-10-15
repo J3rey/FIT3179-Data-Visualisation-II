@@ -1,0 +1,72 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Horizontal stacked bar chart of medals by country (Bronze/Silver/Gold).",
+  "autosize": { "type": "fit", "contains": "padding" },
+  "width": "container",
+  "padding": { "left": 220, "right": 20, "top": 60, "bottom": 20 },
+  "height": { "step": 36 },
+  "data": {
+    "url": "../data/medals_by_country.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Total Medals": "number",
+        "Gold": "number",
+        "Silver": "number",
+        "Bronze": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [{ "op": "row_number", "as": "rank" }],
+      "sort": [{ "field": "Total Medals", "order": "descending" }]
+    },
+    {
+      "filter": "datum.rank <= 15"
+    },
+    {
+      "fold": ["Bronze", "Silver", "Gold"],
+      "as": ["MedalType", "Count"]
+    },
+    {
+      "calculate": "datum.MedalType === 'Bronze' ? 1 : datum.MedalType === 'Silver' ? 2 : 3",
+      "as": "MedalOrder"
+    }
+  ],
+  "mark": { "type": "bar", "tooltip": true },
+  "encoding": {
+    "y": {
+      "field": "Country",
+      "type": "nominal",
+      "sort": { "field": "Total Medals", "order": "descending" },
+      "axis": { "title": "Country" }
+    },
+    "x": {
+      "aggregate": "sum",
+      "field": "Count",
+      "type": "quantitative",
+      "axis": { "title": "Medal count" }
+    },
+    "color": {
+      "field": "MedalType",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Bronze", "Silver", "Gold"],
+        "range": ["#cd7f32", "#c0c0c0", "#d4af37"]
+      },
+      "legend": { "title": "Medal", "orient": "top" }
+    },
+    "order": { "field": "MedalOrder", "sort": "ascending" },
+    "tooltip": [
+      { "field": "Country", "type": "nominal" },
+      { "field": "MedalType", "type": "nominal" },
+      { "field": "Count", "type": "quantitative" },
+      {
+        "field": "Total Medals",
+        "type": "quantitative",
+        "title": "Total Medals"
+      }
+    ]
+  }
+}
