@@ -20,6 +20,12 @@
     >
       <div id="pie_chart_years"></div>
     </div>
+    <div
+      id="missing-data-label"
+      style="text-align: center; color: #b00; margin-top: 10px; display: none"
+    >
+      Some countries are missing data for the selected year
+    </div>
 
     <script>
       vegaEmbed("#pie_chart_years", "../js/pie_chart_years.json", {
@@ -30,6 +36,65 @@
           // chart rendered
         })
         .catch(console.error);
+
+      // runtime check: fetch CSV and show a label when some expected teams are missing for the selected year
+      (function () {
+        const expected = [
+          "United States",
+          "France",
+          "Australia",
+          "Germany",
+          "Japan",
+          "Spain",
+          "China",
+          "Italy",
+          "Other",
+        ];
+
+        async function checkYear(year) {
+          try {
+            const res = await fetch(
+              "../data/top8_countries_attendance_over_years.csv"
+            );
+            const text = await res.text();
+            const lines = text.split("\n").slice(1).filter(Boolean);
+            const teams = new Set();
+            for (const l of lines) {
+              const parts = l.split(",");
+              const team = parts[0];
+              const yr = parts[1] ? parts[1].trim() : "";
+              if (Number(yr) === Number(year)) teams.add(team);
+            }
+
+            const missing = expected.filter((t) => !teams.has(t));
+            const label = document.getElementById("missing-data-label");
+            if (missing.length > 0) {
+              label.style.display = "block";
+              label.textContent = `Missing data for: ${missing.join(", ")}`;
+            } else {
+              label.style.display = "none";
+            }
+          } catch (e) {
+            console.error("Error checking CSV for missing teams", e);
+          }
+        }
+
+        // initial check using the default param value (2024)
+        checkYear(2024);
+
+        // Listen for parameter changes by polling the bound input in the vega control
+        // (Vega's bound range control is injected into the DOM; poll it for changes.)
+        let lastYear = 2024;
+        setInterval(() => {
+          const input = document.querySelector("input[type=range]");
+          if (!input) return;
+          const val = Number(input.value);
+          if (val !== lastYear) {
+            lastYear = val;
+            checkYear(val);
+          }
+        }, 500);
+      })();
     </script>
   </body>
 </html>
