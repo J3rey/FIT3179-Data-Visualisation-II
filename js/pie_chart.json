@@ -2,12 +2,12 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Pie chart showing country participation percentage (top 8 + Other).",
   "title": {
-    "text": "Country Participation — Top 8 + Other",
+    "text": "Country Participation Distribution",
     "anchor": "middle"
   },
   "width": 480,
   "height": 360,
-  "data": { "url": "../data/top8_country_participation.csv" },
+  "data": { "url": "../data/country_participation_percent.csv" },
   "mark": { "type": "arc", "tooltip": true },
   "encoding": {
     "theta": {
