@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Pie Chart — Country Participation</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+      .chart-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">Country Participation — Top 8 + Other</h1>
+    <div class="chart-wrapper">
+      <div id="pie_chart"></div>
+    </div>
+
+    <script>
+      vegaEmbed("#pie_chart", "../js/pie_chart.json", {
+        actions: true,
+        renderer: "svg",
+      })
+        .then(function (result) {
+          // chart rendered
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>

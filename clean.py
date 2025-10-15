@@ -1,35 +1,19 @@
 import pandas as pd
 
-# Load the CSV file
-file_path = "medallists.csv"  # change path if needed
-df = pd.read_csv(file_path)
+# Load your dataset
+df = pd.read_csv("athletes.csv")
 
-# Group and count medals by country
-medal_counts = (
-    df.groupby(['country_long', 'country_code', 'medal_type'])
-    .size()
-    .unstack(fill_value=0)
-    .reset_index()
-)
+# Count how many athletes are from each country
+country_counts = df['country'].value_counts().reset_index()
 
 # Rename columns for clarity
-medal_counts.columns.name = None
-medal_counts = medal_counts.rename(columns={
-    'country_long': 'Country',
-    'country_code': 'Code',
-    'Gold Medal': 'Gold',
-    'Silver Medal': 'Silver',
-    'Bronze Medal': 'Bronze'
-})
+country_counts.columns = ['Country', 'Number_of_Athletes']
 
-# Add total medal count
-medal_counts['Total Medals'] = medal_counts[['Gold', 'Silver', 'Bronze']].sum(axis=1)
+# Sort from highest to lowest
+country_counts = country_counts.sort_values(by='Number_of_Athletes', ascending=False)
 
-# Reorder columns
-medal_counts = medal_counts[['Country', 'Code', 'Total Medals', 'Gold', 'Silver', 'Bronze']]
+# Display top 10 countries
+print(country_counts.head(10))
 
-# Display the first few rows
-print(medal_counts.head(10))
-
-# Optional: save to CSV
-medal_counts.to_csv("cleaned_medals.csv", index=False)
+# Optionally export to CSV
+country_counts.to_csv("country_athlete_counts.csv", index=False)
