@@ -1,0 +1,91 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Gender distribution in Paris 2024 Summer Olympics",
+  "width": 500,
+  "height": 300,
+  "data": {
+    "values": [
+      { "gender": "Male", "percentage": 50.91, "symbol": "♂" },
+      { "gender": "Female", "percentage": 49.09, "symbol": "♀" }
+    ]
+  },
+  "mark": {
+    "type": "bar",
+    "cornerRadius": 5
+  },
+  "encoding": {
+    "x": {
+      "field": "gender",
+      "type": "nominal",
+      "axis": {
+        "labelAngle": 0,
+        "labelFontSize": 14,
+        "title": null
+      }
+    },
+    "y": {
+      "field": "percentage",
+      "type": "quantitative",
+      "axis": {
+        "title": "Percentage (%)",
+        "grid": true
+      },
+      "scale": {
+        "domain": [0, 100]
+      }
+    },
+    "color": {
+      "field": "gender",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Male", "Female"],
+        "range": ["#0072B2", "#D55E00"]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      { "field": "gender", "type": "nominal", "title": "Gender" },
+      {
+        "field": "percentage",
+        "type": "quantitative",
+        "title": "Percentage",
+        "format": ".2f"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 5
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dy": -10,
+        "fontSize": 40
+      },
+      "encoding": {
+        "text": { "field": "symbol", "type": "nominal" },
+        "color": { "value": "black" }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dy": 15,
+        "fontSize": 18,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "text": {
+          "field": "percentage",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": { "value": "white" }
+      }
+    }
+  ]
+}

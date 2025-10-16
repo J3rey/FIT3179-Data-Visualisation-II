@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A butterfly chart showing athlete age distribution by gender.",
   "title": {
-    "text": "Athlete Age Distribution by Gender",
+    "text": "Athlete Age Distribution by Gender in Paris 2024 Summer Olympics",
     "fontSize": 18,
     "fontWeight": "bold",
     "anchor": "middle"
@@ -77,7 +77,7 @@
   "data": [
     {
       "name": "athletes",
-      "url": "../data/athletes_name_gender_age.csv",
+      "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/athletes_name_gender_age.csv",
       "format": { "type": "csv", "parse": { "age": "number" } },
       "transform": [
         {
@@ -334,4 +334,3 @@
     }
   ]
 }
-

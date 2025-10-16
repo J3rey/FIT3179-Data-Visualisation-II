@@ -2,12 +2,14 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Dynamic pie chart showing top 8 countries' attendance by year with year filter.",
   "title": {
-    "text": "Top 8 Countries' Attendance Over Years",
+    "text": "Top 8 Countries' Attendance Over Years in Olympics",
     "anchor": "middle"
   },
   "width": 500,
   "height": 400,
-  "data": { "url": "../data/top8_countries_over_the_years.csv" },
+  "data": {
+    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/top8_countries_over_the_years.csv"
+  },
   "params": [
     {
       "name": "selectedYear",

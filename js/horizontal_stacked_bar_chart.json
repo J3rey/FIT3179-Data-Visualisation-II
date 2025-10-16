@@ -6,7 +6,7 @@
   "padding": { "left": 220, "right": 20, "top": 60, "bottom": 20 },
   "height": { "step": 36 },
   "data": {
-    "url": "../data/medals_by_country.csv",
+    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/medals_by_country_2024.csv",
     "format": {
       "type": "csv",
       "parse": {
