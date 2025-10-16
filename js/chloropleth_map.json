@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Country Athlete Counts (Participation)",
+    "text": "Country Participation in 2024 Summer Paris Olympics",
     "fontSize": 24,
     "fontWeight": "bold",
     "anchor": "middle",
@@ -9,15 +9,19 @@
   },
   "width": "container",
   "height": "container",
-  "autosize": {
-    "type": "fit",
-    "contains": "padding"
-  },
+  "autosize": { "type": "fit", "contains": "padding" },
   "data": {
     "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-HW-W9/refs/heads/main/symbols/ne_110m.topojson",
     "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
   },
   "projection": { "type": "naturalEarth1" },
+  "params": [
+    {
+      "name": "showLabels",
+      "value": true,
+      "bind": { "input": "checkbox", "name": "Show top 5 couintries" }
+    }
+  ],
   "layer": [
     {
       "transform": [
@@ -52,9 +56,7 @@
         {
           "lookup": "country_lookup",
           "from": {
-            "data": {
-              "url": "../data/country_athlete_counts.csv"
-            },
+            "data": { "url": "../data/country_athlete_counts.csv" },
             "key": "Country",
             "fields": ["Number_of_Athletes"]
           },
@@ -114,27 +116,59 @@
           }
         ]
       }
-    }
-  ],
-  "config": {
-    "title": {
-      "fontSize": 24,
-      "fontWeight": "bold",
-      "color": "#2c3e50",
-      "offset": 10,
-      "anchor": "middle"
     },
-    "view": {
-      "stroke": null
-    },
-    "legend": {
-      "titleFontSize": 14,
-      "titleFontWeight": "bold",
-      "titleColor": "#2c3e50",
-      "labelFontSize": 12,
-      "labelColor": "#34495e",
-      "cornerRadius": 5,
-      "padding": 10
+    {
+      "data": {
+        "values": [
+          { "Country": "United States", "lon": -98, "lat": 39 },
+          { "Country": "France", "lon": 2, "lat": 46 },
+          { "Country": "Australia", "lon": 134, "lat": -25 },
+          { "Country": "Germany", "lon": 10.5, "lat": 51 },
+          { "Country": "Japan", "lon": 138, "lat": 36 }
+        ]
+      },
+      "transform": [
+        {
+          "lookup": "Country",
+          "from": {
+            "data": { "url": "../data/country_athlete_counts.csv" },
+            "key": "Country",
+            "fields": ["Number_of_Athletes"]
+          }
+        },
+        {
+          "calculate": "toNumber(datum.Number_of_Athletes)",
+          "as": "athlete_count"
+        },
+        {
+          "window": [{ "op": "rank", "as": "rank" }],
+          "sort": [{ "field": "athlete_count", "order": "descending" }]
+        },
+        { "filter": "datum.rank <= 5" },
+        {
+          "calculate": "format(datum.rank, '.0f') + '. ' + datum.Country + ' ' + datum.athlete_count",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Trebuchet MS",
+        "fontSize": 15,
+        "fontWeight": "normal",
+        "dy": -6,
+        "stroke": "black",
+        "strokeWidth": 0.3
+      },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "text": { "field": "label" },
+        "color": { "value": "#000000" },
+        "opacity": {
+          "condition": { "test": "showLabels", "value": 1 },
+          "value": 0
+        }
+      }
     }
-  }
+  ]
 }

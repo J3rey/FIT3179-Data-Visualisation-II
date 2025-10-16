@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Horizontal stacked bar chart of medals by country (Bronze/Silver/Gold).",
+  "description": "Medal Distribution in 2024 Summer Paris Olympics",
   "autosize": { "type": "fit", "contains": "padding" },
   "width": "container",
   "padding": { "left": 220, "right": 20, "top": 60, "bottom": 20 },

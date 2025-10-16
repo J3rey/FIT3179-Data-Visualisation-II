@@ -7,14 +7,14 @@
   },
   "width": 500,
   "height": 400,
-  "data": { "url": "../data/top8_countries_attendance_over_years.csv" },
+  "data": { "url": "../data/top8_countries_over_the_years.csv" },
   "params": [
     {
       "name": "selectedYear",
       "value": 2024,
       "bind": {
         "input": "range",
-        "min": 1896,
+        "min": 1964,
         "max": 2024,
         "step": 4
       }
@@ -33,7 +33,7 @@
       "stack": true
     },
     "color": {
-      "field": "Team",
+      "field": "country",
       "type": "nominal",
       "scale": {
         "domain": [
@@ -53,10 +53,14 @@
           "Japan",
           "Brazil",
           "Netherlands",
-          "Norway",
           "Sweden",
-          "Switzerland",
           "Belgium",
+          "Romania",
+          "Cuba",
+          "Bulgaria",
+          "Hungary",
+          "Mexico",
+          "Unified Team",
           "Other"
         ],
         "range": [
@@ -75,11 +79,15 @@
           "#ffd92f",
           "#e5c494",
           "#b3b3b3",
-          "#fc8d62",
           "#8dd3c7",
           "#ffffb3",
-          "#bebada",
           "#fb8072",
+          "#1b9e77",
+          "#d95f02",
+          "#7570b3",
+          "#fb9a99",
+          "#fccde5",
+          "#b15928",
           "#d9d9d9"
         ]
       },
@@ -89,7 +97,7 @@
       }
     },
     "tooltip": [
-      { "field": "Team", "type": "nominal", "title": "Team" },
+      { "field": "country", "type": "nominal", "title": "Country" },
       { "field": "Year", "type": "quantitative", "title": "Year" },
       {
         "field": "Percentage_Attendance",
