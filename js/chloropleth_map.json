@@ -19,7 +19,7 @@
     {
       "name": "showLabels",
       "value": true,
-      "bind": { "input": "checkbox", "name": "Show top 5 couintries" }
+      "bind": { "input": "checkbox", "name": "Show top 5 countries" }
     }
   ],
   "layer": [

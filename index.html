@@ -7,15 +7,16 @@
       Which demographic group is currently the most prominent in the Olympics?
     </title>
 
-    <!-- Vega, Vega-Lite, Vega-Embed -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <!-- Use the same library versions as the working choropleth page -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.5.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
 
     <style>
       :root {
         --max-width: 1100px;
       }
+
       html,
       body {
         margin: 0;
@@ -26,26 +27,22 @@
           Arial, sans-serif;
         line-height: 1.45;
       }
+
       header {
         max-width: var(--max-width);
         margin: 24px auto 8px auto;
         padding: 0 16px;
-        text-align: center;
+        text-align: centre;
       }
+
       header h1 {
         margin: 0 0 6px 0;
         font-size: clamp(20px, 3.5vw, 32px);
         font-weight: 700;
         letter-spacing: 0.3px;
       }
-      header p {
-        margin: 0 auto 6px auto;
-        max-width: 820px;
-        opacity: 0.85;
-        font-size: 14px;
-      }
 
-      /* Poster layout, vertical scroll */
+      /* Poster layout */
       .poster {
         max-width: var(--max-width);
         margin: 0 auto 48px auto;
@@ -55,29 +52,23 @@
         gap: 28px;
       }
 
-      /* Each section has a small title and a figure container */
       section.chart-block {
         display: flex;
         flex-direction: column;
         gap: 10px;
       }
+
       .chart-title {
         font-size: clamp(16px, 2.4vw, 20px);
         font-weight: 600;
         letter-spacing: 0.2px;
         margin: 0;
       }
-      .chart-note {
-        margin: 0;
-        font-size: 13px;
-        opacity: 0.7;
-      }
 
-      /* Chart host, prevents any cut off, allows x scroll if spec is wider */
+      /* Chart host, no initial horizontal scroll, no blur */
       .vis {
         width: 100%;
-        overflow-x: auto;
-        overflow-y: visible;
+        overflow: visible;
         border: 1px solid #eee;
         border-radius: 10px;
         padding: 10px;
@@ -85,7 +76,6 @@
         background: #fff;
       }
 
-      /* Make embeds expand inside host, reduce blur on scaled canvas */
       .vega-embed,
       .vega-embed > canvas,
       .vega-embed > svg {
@@ -93,17 +83,17 @@
         max-width: none;
       }
 
-      /* Small footer */
       footer {
         max-width: var(--max-width);
         margin: 16px auto 40px auto;
         padding: 0 16px;
         font-size: 12px;
         opacity: 0.65;
-        text-align: center;
+        text-align: centre;
       }
     </style>
   </head>
+
   <body>
     <header>
       <h1>
@@ -112,7 +102,6 @@
     </header>
 
     <main class="poster">
-      <!-- Containers for each chart -->
       <section class="chart-block">
         <h2 class="chart-title" id="title-butterfly">
           Athlete Age Distribution by Gender in Paris 2024 Summer Olympics
@@ -122,11 +111,8 @@
 
       <section class="chart-block">
         <h2 class="chart-title" id="title-choropleth">
-          Medals or Participation, by Country Map
+          Country Participation in 2024 Summer Paris Olympics
         </h2>
-        <p class="chart-note">
-          If the spec has its own title, it will show in the graphic.
-        </p>
         <div class="vis" id="chart-choropleth"></div>
       </section>
 
@@ -152,125 +138,120 @@
       </section>
     </main>
 
-    <footer>
-      Built with Vega and Vega-Lite, charts are fully interactive with tooltips
-      where defined in the specs.
-    </footer>
-
     <script>
-      // Minimal, crisp rendering
-      const embedOpts = {
-        renderer: "canvas",
-        actions: false,
-        tooltip: true,
-      };
+      // Crisp defaults for non map charts
+      const defaultOpts = { renderer: "canvas", actions: false, tooltip: true };
 
       const charts = [
         {
           el: "#chart-butterfly",
           file: "./js/butterfly_chart.json",
+          kind: "other",
           titleEl: "#title-butterfly",
-        },
-        {
-          el: "#chart-choropleth",
-          file: "./js/chloropleth_map.json",
-          titleEl: "#title-choropleth",
         },
         {
           el: "#chart-stacked",
           file: "./js/horizontal_stacked_bar_chart.json",
+          kind: "other",
           titleEl: "#title-stacked",
         },
         {
           el: "#chart-pictorial",
           file: "./js/pictorial_chart.json",
+          kind: "other",
           titleEl: "#title-pictorial",
         },
         {
           el: "#chart-pie",
           file: "./js/pie_chart_years.json",
+          kind: "other",
           titleEl: "#title-pie",
         },
+        {
+          el: "#chart-choropleth",
+          file: "./js/chloropleth_map.json",
+          kind: "choropleth",
+          titleEl: "#title-choropleth",
+        }, // embed last
       ];
 
-      // Make each spec responsive to its host width
-      async function loadAndEmbed({ el, file, titleEl }) {
+      // Wait for layout and fonts so width is stable
+      async function whenReadyForLayout() {
+        if (document.fonts && document.fonts.ready) {
+          try {
+            await document.fonts.ready;
+          } catch {}
+        }
+        // two RAF ticks to be safe
+        await new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r))
+        );
+      }
+
+      function boxWidth(el) {
+        const rect = el.getBoundingClientRect();
+        const w = Math.max(
+          320,
+          Math.floor(rect.width || el.clientWidth || window.innerWidth)
+        );
+        return w;
+      }
+
+      async function embedChart({ el, file, kind, titleEl }) {
         const host = document.querySelector(el);
         try {
           const res = await fetch(file);
-          let spec = await res.json();
+          const spec = await res.json();
 
-          // Surface spec title if present
+          // surface title if present
           try {
-            const titleNode = document.querySelector(titleEl);
+            const t = document.querySelector(titleEl);
             if (spec && spec.title) {
-              if (typeof spec.title === "string")
-                titleNode.textContent = spec.title;
-              else if (spec.title.text) titleNode.textContent = spec.title.text;
+              t.textContent =
+                typeof spec.title === "string"
+                  ? spec.title
+                  : spec.title.text || t.textContent;
             }
           } catch {}
 
-          const isVegaLite =
-            typeof spec.$schema === "string" &&
-            spec.$schema.includes("vega-lite");
+          await whenReadyForLayout();
 
-          if (isVegaLite) {
-            // Remove fixed width that causes squish
-            if (typeof spec.width === "number") delete spec.width;
-            // Let Vega-Lite size to container width
-            spec.width = "container";
+          let view;
+          if (kind === "choropleth") {
+            // Set a real numeric width and height before embedding
+            const w = boxWidth(host);
+            const h = Math.round(w * 0.55); // nice map aspect
 
-            // Give a sensible height if none set
-            if (typeof spec.height !== "number") {
-              // For maps a bit taller feels better
-              spec.height = 520;
-            }
+            // Make a shallow copy so we do not mutate your file on other pages
+            const mapSpec = Object.assign({}, spec, {
+              width: w,
+              height: h,
+              autosize: { type: "pad", contains: "padding" }, // avoid fit-on-zero issues
+            });
 
-            // Extra safety for map specs that use projections
-            if (spec.projection && !spec.config) spec.config = {};
-            if (spec.projection) {
-              // Helps Vega-Lite fit the map to the view box
-              spec.projection.fit = spec.projection.fit ?? true;
-            }
+            view = await vegaEmbed(el, mapSpec); // default options work best for maps
 
-            // Improve defaults for responsive sizing
-            spec.config = Object.assign(
-              {
-                view: {
-                  continuousWidth: host.clientWidth,
-                  continuousHeight: spec.height || 520,
-                },
-              },
-              spec.config || {}
-            );
+            // Keep it responsive
+            const ro = new ResizeObserver(() => {
+              try {
+                const newW = boxWidth(host);
+                const newH = Math.round(newW * 0.55);
+                view.view.width(newW).height(newH).resize().runAsync();
+              } catch {}
+            });
+            ro.observe(host);
           } else {
-            // Vega spec
-            // Remove hard width, set autosize to fit the host
-            if (typeof spec.width === "number") delete spec.width;
-            spec.autosize = Object.assign(
-              { type: "fit", contains: "padding", resize: true },
-              spec.autosize || {}
-            );
-            // Set initial size to host width
-            spec.width = host.clientWidth;
-            if (typeof spec.height !== "number") spec.height = 520;
+            // Non map charts, simple embed with crisp defaults
+            view = await vegaEmbed(el, spec, defaultOpts);
+
+            const ro = new ResizeObserver(() => {
+              try {
+                const newW = boxWidth(host);
+                view.view.width(newW).resize().runAsync();
+              } catch {}
+            });
+            ro.observe(host);
           }
-
-          // First render
-          const view = await vegaEmbed(el, spec, embedOpts);
-
-          // Keep it fitting on window resize
-          const ro = new ResizeObserver(() => {
-            try {
-              const w = host.clientWidth;
-              if (isVegaLite) {
-                view.view.width(w).runAsync();
-              } else {
-                view.view.width(w).runAsync();
-              }
-            } catch {}
-          });
-          ro.observe(host);
         } catch (e) {
           host.innerHTML =
             "<p style='margin:0;padding:6px;font-size:14px;color:#b00020;'>Could not load " +
@@ -280,7 +261,10 @@
         }
       }
 
-      charts.forEach(loadAndEmbed);
+      // Embed after the page has fully laid out
+      window.addEventListener("load", () => {
+        charts.forEach(embedChart);
+      });
     </script>
   </body>
 </html>
