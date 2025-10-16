@@ -56,7 +56,9 @@
         {
           "lookup": "country_lookup",
           "from": {
-            "data": { "url": "../data/country_athlete_counts.csv" },
+            "data": {
+              "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/country_athlete_count_2024.csv"
+            },
             "key": "Country",
             "fields": ["Number_of_Athletes"]
           },
@@ -131,7 +133,9 @@
         {
           "lookup": "Country",
           "from": {
-            "data": { "url": "../data/country_athlete_counts.csv" },
+            "data": {
+              "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/country_athlete_count_2024.csv"
+            },
             "key": "Country",
             "fields": ["Number_of_Athletes"]
           }
