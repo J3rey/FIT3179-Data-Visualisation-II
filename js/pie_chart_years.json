@@ -4,7 +4,11 @@
   "width": 500,
   "height": 400,
   "data": {
-    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/top8_countries_over_the_years.csv"
+    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/top8_countries_over_the_years.csv",
+    "format": {
+      "type": "csv",
+      "parse": { "Year": "number", "Percentage_Attendance": "number" }
+    }
   },
   "params": [
     {
@@ -19,17 +23,26 @@
     }
   ],
   "transform": [
+    { "filter": "toNumber(datum.Year) === selectedYear" },
     {
-      "filter": "datum.Year == selectedYear"
-    }
+      "calculate": "datum.country === 'Others' ? 'Other' : datum.country",
+      "as": "country"
+    },
+    {
+      "aggregate": [
+        { "op": "sum", "field": "Percentage_Attendance", "as": "total" }
+      ],
+      "groupby": ["country"]
+    },
+    {
+      "window": [{ "op": "rank", "as": "rank" }],
+      "sort": [{ "field": "total", "order": "descending" }]
+    },
+    { "filter": "datum.rank <= 8" }
   ],
   "mark": { "type": "arc", "tooltip": true, "outerRadius": 160 },
   "encoding": {
-    "theta": {
-      "field": "Percentage_Attendance",
-      "type": "quantitative",
-      "stack": true
-    },
+    "theta": { "field": "total", "type": "quantitative" },
     "color": {
       "field": "country",
       "type": "nominal",
@@ -96,9 +109,8 @@
     },
     "tooltip": [
       { "field": "country", "type": "nominal", "title": "Country" },
-      { "field": "Year", "type": "quantitative", "title": "Year" },
       {
-        "field": "Percentage_Attendance",
+        "field": "total",
         "type": "quantitative",
         "title": "Attendance (%)",
         "format": ".2f"
