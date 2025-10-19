@@ -1,8 +1,23 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Dynamic pie chart showing top 8 countries' attendance by year with year filter.",
-  "width": 500,
-  "height": 400,
+  "width": "container",
+  "height": 500,
+  "padding": 10,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "config": {
+    "view": { "stroke": null },
+    "style": { "cell": { "stroke": null } },
+    "legend": {
+      "orient": "right",
+      "offset": 20,
+      "titlePadding": 10
+    }
+  },
   "data": {
     "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/top8_countries_over_the_years.csv",
     "format": {
@@ -18,7 +33,8 @@
         "input": "range",
         "min": 1964,
         "max": 2024,
-        "step": 4
+        "step": 4,
+        "name": "Year: "
       }
     }
   ],
@@ -40,7 +56,12 @@
     },
     { "filter": "datum.rank <= 8" }
   ],
-  "mark": { "type": "arc", "tooltip": true, "outerRadius": 160 },
+  "mark": {
+    "type": "arc",
+    "tooltip": true,
+    "outerRadius": 200,
+    "innerRadius": 0
+  },
   "encoding": {
     "theta": { "field": "total", "type": "quantitative" },
     "color": {
@@ -104,7 +125,12 @@
       },
       "legend": {
         "title": "Country/Team",
-        "symbolLimit": 0
+        "symbolLimit": 0,
+        "orient": "right",
+        "direction": "vertical",
+        "columns": 1,
+        "labelLimit": 200,
+        "padding": 10
       }
     },
     "tooltip": [
