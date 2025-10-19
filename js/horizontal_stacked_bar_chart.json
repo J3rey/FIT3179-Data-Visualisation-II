@@ -1,10 +1,16 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Medal Distribution in 2024 Summer Paris Olympics",
-  "autosize": { "type": "fit", "contains": "padding" },
+  "title": {
+    "text": "Medal Distribution in 2024 Summer Paris Olympics",
+    "fontSize": 18,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#2a5298"
+  },
   "width": "container",
-  "padding": { "left": 220, "right": 20, "top": 60, "bottom": 20 },
-  "height": { "step": 36 },
+  "height": { "step": 32 },
+  "autosize": { "type": "fit", "resize": true, "contains": "padding" },
   "data": {
     "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/medals_by_country_2024.csv",
     "format": {
@@ -40,13 +46,25 @@
       "field": "Country",
       "type": "nominal",
       "sort": { "field": "Total Medals", "order": "descending" },
-      "axis": { "title": "Country" }
+      "axis": {
+        "title": null,
+        "labelFontSize": 12,
+        "labelLimit": 150
+      }
     },
     "x": {
       "aggregate": "sum",
       "field": "Count",
       "type": "quantitative",
-      "axis": { "title": "Medal count" }
+      "axis": {
+        "title": "Medal Count",
+        "titleFontSize": 13,
+        "titleFontWeight": "bold",
+        "titleColor": "#2a5298",
+        "labelFontSize": 11,
+        "grid": true,
+        "gridOpacity": 0.3
+      }
     },
     "color": {
       "field": "MedalType",
@@ -55,7 +73,17 @@
         "domain": ["Bronze", "Silver", "Gold"],
         "range": ["#cd7f32", "#c0c0c0", "#d4af37"]
       },
-      "legend": { "title": "Medal", "orient": "top" }
+      "legend": {
+        "title": "Medal Type",
+        "orient": "top",
+        "direction": "horizontal",
+        "titleFontSize": 13,
+        "titleFontWeight": "bold",
+        "titleColor": "#2a5298",
+        "labelFontSize": 12,
+        "symbolSize": 150,
+        "offset": 10
+      }
     },
     "order": { "field": "MedalOrder", "sort": "ascending" },
     "tooltip": [

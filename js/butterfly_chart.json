@@ -1,12 +1,19 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A butterfly chart showing athlete age distribution by gender.",
-  "height": 500,
-  "padding": 5,
+  "title": {
+    "text": "Athlete Age Distribution by Gender",
+    "fontSize": 20,
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "#2a5298"
+  },
+  "height": 450,
+  "padding": { "top": 40, "bottom": 50, "left": 10, "right": 10 },
 
   "signals": [
-    { "name": "chartWidth", "value": 250 },
-    { "name": "chartPad", "value": 60 },
+    { "name": "chartWidth", "value": 350 },
+    { "name": "chartPad", "value": 80 },
     { "name": "width", "update": "2 * chartWidth + chartPad" },
     {
       "name": "selectedAgeGroups",
@@ -136,7 +143,7 @@
       "name": "c",
       "type": "ordinal",
       "domain": ["Male", "Female"],
-      "range": ["#6c4e97", "#d5855a"]
+      "range": ["#0072B2", "#D55E00"]
     }
   ],
 
@@ -144,24 +151,29 @@
     {
       "fill": "c",
       "title": "Gender",
-      "orient": "top-right",
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "middle",
+      "offset": 10,
       "encode": {
         "symbols": {
           "update": {
-            "fillOpacity": { "value": 0.6 },
-            "stroke": { "value": "transparent" }
+            "fillOpacity": { "value": 0.7 },
+            "stroke": { "value": "transparent" },
+            "size": { "value": 100 }
           }
         },
         "labels": {
           "update": {
-            "fontSize": { "value": 12 },
-            "fill": { "value": "#000" }
+            "fontSize": { "value": 13 },
+            "fill": { "value": "#333" }
           }
         },
         "title": {
           "update": {
             "fontSize": { "value": 14 },
-            "fontWeight": { "value": "bold" }
+            "fontWeight": { "value": "bold" },
+            "fill": { "value": "#2a5298" }
           }
         }
       }
@@ -180,7 +192,9 @@
           "text": { "signal": "datum.ageGroup + '-' + (datum.ageGroup + 4)" },
           "baseline": { "value": "middle" },
           "align": { "value": "center" },
-          "fill": { "value": "#000" }
+          "fill": { "value": "#333" },
+          "fontSize": { "value": 12 },
+          "fontWeight": { "value": "bold" }
         }
       }
     },
@@ -210,7 +224,13 @@
           "orient": "bottom",
           "scale": "x",
           "format": "d",
-          "title": "Female Athletes"
+          "title": "Female Athletes",
+          "titleFontSize": 13,
+          "titleFontWeight": "bold",
+          "titleColor": "#d5855a",
+          "labelFontSize": 11,
+          "grid": true,
+          "gridOpacity": 0.2
         }
       ],
 
@@ -281,7 +301,13 @@
           "orient": "bottom",
           "scale": "x",
           "format": "d",
-          "title": "Male Athletes"
+          "title": "Male Athletes",
+          "titleFontSize": 13,
+          "titleFontWeight": "bold",
+          "titleColor": "#6c4e97",
+          "labelFontSize": 11,
+          "grid": true,
+          "gridOpacity": 0.2
         }
       ],
 
