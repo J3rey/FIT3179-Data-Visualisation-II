@@ -12,8 +12,8 @@
   "padding": { "top": 40, "bottom": 50, "left": 10, "right": 10 },
 
   "signals": [
-    { "name": "chartWidth", "value": 350 },
-    { "name": "chartPad", "value": 80 },
+    { "name": "chartWidth", "value": 200 },
+    { "name": "chartPad", "value": 60 },
     { "name": "width", "update": "2 * chartWidth + chartPad" },
     {
       "name": "selectedAgeGroups",
@@ -215,7 +215,8 @@
           "range": [{ "signal": "chartWidth" }, 0],
           "nice": true,
           "zero": true,
-          "domain": { "data": "athletes", "field": "count" }
+          "domain": { "data": "athletes", "field": "count" },
+          "domainMax": 2500
         }
       ],
 
@@ -230,7 +231,8 @@
           "titleColor": "#d5855a",
           "labelFontSize": 11,
           "grid": true,
-          "gridOpacity": 0.2
+          "gridOpacity": 0.2,
+          "tickCount": 5
         }
       ],
 
@@ -292,7 +294,8 @@
           "range": [0, { "signal": "chartWidth" }],
           "nice": true,
           "zero": true,
-          "domain": { "data": "athletes", "field": "count" }
+          "domain": { "data": "athletes", "field": "count" },
+          "domainMax": 2500
         }
       ],
 
@@ -307,7 +310,8 @@
           "titleColor": "#6c4e97",
           "labelFontSize": 11,
           "grid": true,
-          "gridOpacity": 0.2
+          "gridOpacity": 0.2,
+          "tickCount": 5
         }
       ],
 

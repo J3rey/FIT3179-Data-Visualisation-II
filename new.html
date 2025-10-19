@@ -183,6 +183,18 @@
         color: #a8c6ff;
       }
 
+      /* Footer link styles for better contrast and visibility */
+      footer a {
+        color: #ffe082; /* warm light yellow for high contrast against dark blue */
+        text-decoration: underline;
+      }
+
+      footer a:hover,
+      footer a:focus {
+        color: #ffffff; /* white on hover/focus for clear emphasis */
+        text-decoration: none;
+      }
+
       @media (max-width: 768px) {
         .chart-row {
           flex-direction: column;
@@ -400,19 +412,48 @@
               The visualizations were developed using Vega and Vega-Lite, with a
               focus on clear communication of complex demographic data.
             </p>
+            <p style="margin-top: 12px">
+              <strong>Author:</strong> Jeremia Yovinus<br />
+              <strong>Date:</strong> 19/10/2025
+            </p>
           </div>
 
           <div class="data-sources">
             <h3 class="footer-title">Data Sources</h3>
-            <p>
-              Athlete demographic data sourced from official Olympic records and
-              repositories:
-            </p>
+            <p>Datasets used for this analysis:</p>
             <ul>
-              <li>International Olympic Committee historical data</li>
-              <li>Official Paris 2024 Olympic Games participant information</li>
-              <li>World population and geographic data from Natural Earth</li>
+              <li>
+                Olympic Dataset (1964-2016) —
+                <a
+                  href="https://www.kaggle.com/datasets/bhanupratapbiswas/olympic-data/data"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Kaggle: Olympic Dataset 1964-2016</a
+                >
+              </li>
+              <li>
+                Athlete Olympic Dataset 2024 (Paris) —
+                <a
+                  href="https://www.kaggle.com/datasets/piterfm/paris-2024-olympic-summer-games/data?select=athletes.csv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Kaggle: Paris 2024 athletes.csv</a
+                >
+              </li>
+              <li>
+                Medallists Olympic Dataset 2024 (Paris) —
+                <a
+                  href="https://www.kaggle.com/datasets/piterfm/paris-2024-olympic-summer-games/data?select=medallists.csv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Kaggle: Paris 2024 medallists.csv</a
+                >
+              </li>
             </ul>
+            <p>
+              Additional geographic/topology data from Natural Earth and local
+              topojson assets in the repository.
+            </p>
           </div>
         </div>
       </footer>
