@@ -1,0 +1,183 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": { "text": "Olympics, gender overview", "anchor": "start" },
+  "params": [
+    {
+      "name": "year_filter",
+      "value": 2016,
+      "bind": {
+        "input": "select",
+        "options": [
+          1896, 1900, 1904, 1908, 1912, 1920, 1924, 1928, 1932, 1936, 1948,
+          1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992,
+          1994, 1996, 1998, 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014,
+          2016, 2024
+        ],
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "vconcat": [
+    {
+      "width": 450,
+      "height": 380,
+      "data": {
+        "url": "../data/Male_vs_Female_Percentages_by_Olympic_Year.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "Year": "number",
+            "Male_Percent": "number",
+            "Female_Percent": "number"
+          }
+        }
+      },
+      "transform": [
+        { "filter": "toNumber(datum.Year) == toNumber(year_filter)" },
+        {
+          "fold": ["Male_Percent", "Female_Percent"],
+          "as": ["gender_type", "percentage"]
+        },
+        {
+          "calculate": "datum.gender_type === 'Male_Percent' ? 'Male' : 'Female'",
+          "as": "gender"
+        },
+        {
+          "calculate": "datum.gender_type === 'Male_Percent' ? '♂' : '♀'",
+          "as": "symbol"
+        },
+        { "calculate": "datum.percentage + 10", "as": "iconY" }
+      ],
+      "encoding": {
+        "x": {
+          "field": "gender",
+          "type": "nominal",
+          "axis": { "labelAngle": 0, "title": null }
+        },
+        "y": {
+          "field": "percentage",
+          "type": "quantitative",
+          "scale": { "domain": [0, 110] },
+          "axis": {
+            "title": "Percentage (%)",
+            "titleColor": "black",
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "gender",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Male", "Female"],
+            "range": ["#0072B2", "#D55E00"]
+          },
+          "legend": null
+        }
+      },
+      "layer": [
+        {
+          "mark": { "type": "bar", "cornerRadius": 6, "width": 110 },
+          "encoding": {
+            "tooltip": [
+              { "field": "Year", "type": "quantitative", "title": "Year" },
+              { "field": "gender", "type": "nominal", "title": "Gender" },
+              {
+                "field": "percentage",
+                "type": "quantitative",
+                "title": "Percentage",
+                "format": ".1f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 14,
+            "fontWeight": "bold",
+            "align": "center",
+            "baseline": "bottom",
+            "dy": -6,
+            "fill": "black",
+            "stroke": "white",
+            "strokeWidth": 2
+          },
+          "encoding": {
+            "text": {
+              "field": "percentage",
+              "type": "quantitative",
+              "format": ".0f"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 26,
+            "align": "center",
+            "baseline": "bottom",
+            "fill": "black",
+            "tooltip": null
+          },
+          "encoding": {
+            "y": { "field": "iconY", "type": "quantitative" },
+            "text": { "field": "symbol" }
+          }
+        }
+      ],
+      "title": {
+        "expr": "'Gender Distribution, ' + year_filter + ' Olympics'",
+        "anchor": "start",
+        "fontSize": 16
+      }
+    },
+    {
+      "width": 800,
+      "height": 420,
+      "data": { "url": "../data/year_age_gender_counts.csv" },
+      "transform": [
+        { "filter": "toNumber(datum.Year) == toNumber(year_filter)" },
+        {
+          "filter": "isValid(datum.Age) && isValid(datum.Count) && isValid(datum.Gender)"
+        },
+        {
+          "calculate": "datum.Gender == 'M' ? 'Male' : datum.Gender == 'F' ? 'Female' : datum.Gender",
+          "as": "GenderNorm"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "filled": true,
+        "opacity": 0.75,
+        "stroke": "black",
+        "strokeWidth": 0.4
+      },
+      "encoding": {
+        "x": { "field": "Age", "type": "quantitative", "title": "Age" },
+        "y": { "field": "Count", "type": "quantitative", "title": "Athletes" },
+        "color": {
+          "field": "GenderNorm",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Male", "Female"],
+            "range": ["#0072B2", "#D55E00"]
+          },
+          "legend": { "title": "Gender" }
+        },
+        "size": {
+          "field": "Count",
+          "type": "quantitative",
+          "scale": { "type": "sqrt", "range": [50, 2000] },
+          "legend": { "title": "Number of Athletes" }
+        },
+        "tooltip": [
+          { "field": "Year", "type": "quantitative" },
+          { "field": "Age", "type": "quantitative" },
+          { "field": "GenderNorm", "type": "nominal", "title": "Gender" },
+          { "field": "Count", "type": "quantitative", "format": "," }
+        ]
+      },
+      "title": { "expr": "'Age by gender, ' + year_filter" }
+    }
+  ]
+}

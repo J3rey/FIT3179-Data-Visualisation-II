@@ -1,41 +1,70 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Gender distribution in Paris 2024 Summer Olympics",
+  "description": "Gender distribution in Olympics by Year",
   "width": 450,
   "height": 380,
   "data": {
-    "values": [
-      { "gender": "Male", "percentage": 50.91, "symbol": "♂" },
-      { "gender": "Female", "percentage": 49.09, "symbol": "♀" }
-    ]
+    "url": "../data/Male_vs_Female_Percentages_by_Olympic_Year.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Year": "number",
+        "Male_Percent": "number",
+        "Female_Percent": "number"
+      }
+    }
   },
-  "mark": {
-    "type": "bar",
-    "cornerRadius": 5
-  },
+
+  "params": [
+    {
+      "name": "year_filter",
+      "value": 2016,
+      "bind": {
+        "input": "select",
+        "options": [
+          1896, 1900, 1904, 1908, 1912, 1920, 1924, 1928, 1932, 1936, 1948,
+          1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992,
+          1994, 1996, 1998, 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014,
+          2016, 2024
+        ],
+        "name": "Select Year: "
+      }
+    }
+  ],
+
+  "transform": [
+    { "filter": "toNumber(datum.Year) == toNumber(year_filter)" },
+    {
+      "fold": ["Male_Percent", "Female_Percent"],
+      "as": ["gender_type", "percentage"]
+    },
+    {
+      "calculate": "datum.gender_type === 'Male_Percent' ? 'Male' : 'Female'",
+      "as": "gender"
+    },
+    {
+      "calculate": "datum.gender_type === 'Male_Percent' ? '♂' : '♀'",
+      "as": "symbol"
+    }
+  ],
+
   "encoding": {
     "x": {
       "field": "gender",
       "type": "nominal",
-      "axis": {
-        "labelAngle": 0,
-        "labelFontSize": 14,
-        "title": null
-      }
+      "axis": { "labelAngle": 0, "labelFontSize": 14, "title": null }
     },
     "y": {
       "field": "percentage",
       "type": "quantitative",
       "axis": {
         "title": "Percentage (%)",
+        "titleColor": "black",
         "grid": true,
         "titleFontSize": 13,
-        "titleFontWeight": "bold",
-        "titleColor": "#2a5298"
+        "titleFontWeight": "bold"
       },
-      "scale": {
-        "domain": [0, 100]
-      }
+      "scale": { "domain": [0, 100] }
     },
     "color": {
       "field": "gender",
@@ -45,50 +74,60 @@
         "range": ["#0072B2", "#D55E00"]
       },
       "legend": null
-    },
-    "tooltip": [
-      { "field": "gender", "type": "nominal", "title": "Gender" },
-      {
-        "field": "percentage",
-        "type": "quantitative",
-        "title": "Percentage",
-        "format": ".2f"
-      }
-    ]
+    }
   },
+
   "layer": [
     {
-      "mark": {
-        "type": "bar",
-        "cornerRadius": 5
-      }
-    },
-    {
-      "mark": {
-        "type": "text",
-        "dy": -10,
-        "fontSize": 40
-      },
+      "mark": { "type": "bar", "cornerRadius": 6, "width": 110 },
       "encoding": {
-        "text": { "field": "symbol", "type": "nominal" },
-        "color": { "value": "black" }
+        "tooltip": [
+          { "field": "Year", "type": "quantitative", "title": "Year" },
+          { "field": "gender", "type": "nominal", "title": "Gender" },
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "title": "Percentage",
+            "format": ".1f"
+          }
+        ]
       }
     },
     {
       "mark": {
         "type": "text",
-        "dy": 15,
-        "fontSize": 18,
-        "fontWeight": "bold"
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -6,
+        "fill": "black"
       },
       "encoding": {
         "text": {
           "field": "percentage",
           "type": "quantitative",
           "format": ".0f"
-        },
-        "color": { "value": "white" }
+        }
       }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 26,
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -18,
+        "fill": "black",
+        "tooltip": null
+      },
+      "encoding": { "text": { "field": "symbol" } }
     }
-  ]
+  ],
+
+  "title": {
+    "expr": "'Gender Distribution, ' + year_filter + ' Olympics'",
+    "anchor": "start",
+    "fontSize": 16
+  }
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Difference Dot Plot — Age by Gender</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Difference Dot Plot, Age by Gender</h1>
+
+    <div
+      id="scatter_plot"
+      style="width: 95%; max-width: 1400px; margin: 20px auto"
+    ></div>
+
+    <script>
+      // Option A, load from a file
+      vegaEmbed("#scatter_plot", "../js/scatter_plot.json", {
+        actions: true,
+      }).catch(console.error);
+    </script>
+  </body>
+</html>

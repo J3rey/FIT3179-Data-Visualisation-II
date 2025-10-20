@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "data": {
+    "url": "../data/year_age_gender_counts.csv"
+  },
+
+  "params": [
+    {
+      "name": "Year_selection",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 1964,
+        "max": 2024,
+        "step": 4,
+        "name": "Year: "
+      }
+    }
+  ],
+
+  "transform": [
+    { "filter": "toNumber(datum.Year) === Year_selection" },
+    {
+      "filter": "isValid(datum.Age) && isValid(datum.Count) && isValid(datum.Gender)"
+    }
+  ],
+
+  "encoding": {
+    "x": {
+      "field": "Age",
+      "type": "quantitative",
+      "title": "Age",
+      "axis": { "tickCount": 10 }
+    },
+    "y": {
+      "field": "Count",
+      "type": "quantitative",
+      "title": "Athletes",
+      "axis": { "tickCount": 8 }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "opacity": 0.7,
+        "stroke": "black",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "color": {
+          "field": "Gender",
+          "type": "nominal",
+          "scale": {
+            "domain": ["M", "F"],
+            "range": ["#0072B2", "#D55E00"]
+          },
+          "legend": { "title": "Gender" }
+        },
+        "size": {
+          "field": "Count",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "range": [50, 2000]
+          },
+          "legend": {
+            "title": "Number of Athletes",
+            "gradientLength": 120,
+            "labelOverlap": true
+          }
+        },
+        "tooltip": [
+          { "field": "Year", "type": "quantitative" },
+          { "field": "Age", "type": "quantitative" },
+          { "field": "Gender", "type": "nominal" },
+          { "field": "Count", "type": "quantitative", "format": "," }
+        ]
+      }
+    }
+  ]
+}

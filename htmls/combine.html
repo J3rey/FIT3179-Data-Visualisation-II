@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Combined Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+      body {
+        font-family: system-ui, Arial, sans-serif;
+        margin: 20px;
+      }
+      #viz {
+        width: 95%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">Combined Charts</h1>
+    <div id="viz"></div>
+
+    <script>
+      // If combine.json is in the same folder as this HTML, keep the path as "combine.json"
+      // Adjust the path if it sits elsewhere
+      vegaEmbed("#viz", "../js/combine.json", { actions: true })
+        .then(() => {
+          /* rendered */
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>

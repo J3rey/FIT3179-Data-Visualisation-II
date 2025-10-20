@@ -21,7 +21,7 @@
   "params": [
     {
       "name": "showLabels",
-      "value": true,
+      "value": false,
       "bind": {
         "input": "checkbox",
         "name": "Show top 5 countries                  "

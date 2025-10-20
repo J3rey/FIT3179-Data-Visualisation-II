@@ -4,19 +4,11 @@
   "width": "container",
   "height": 500,
   "padding": 10,
-  "autosize": {
-    "type": "fit",
-    "contains": "padding",
-    "resize": true
-  },
+  "autosize": { "type": "fit", "contains": "padding", "resize": true },
   "config": {
     "view": { "stroke": null },
     "style": { "cell": { "stroke": null } },
-    "legend": {
-      "orient": "right",
-      "offset": 20,
-      "titlePadding": 10
-    }
+    "legend": { "orient": "right", "offset": 20, "titlePadding": 10 }
   },
   "data": {
     "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/top8_countries_over_the_years.csv",
@@ -56,92 +48,117 @@
     },
     { "filter": "datum.rank <= 8" }
   ],
-  "mark": {
-    "type": "arc",
-    "tooltip": true,
-    "outerRadius": 200,
-    "innerRadius": 0
-  },
-  "encoding": {
-    "theta": { "field": "total", "type": "quantitative" },
-    "color": {
-      "field": "country",
-      "type": "nominal",
-      "scale": {
-        "domain": [
-          "United States",
-          "France",
-          "Australia",
-          "Germany",
-          "Great Britain",
-          "Italy",
-          "Canada",
-          "Spain",
-          "Russia",
-          "Soviet Union",
-          "East Germany",
-          "West Germany",
-          "China",
-          "Japan",
-          "Brazil",
-          "Netherlands",
-          "Sweden",
-          "Belgium",
-          "Romania",
-          "Cuba",
-          "Bulgaria",
-          "Hungary",
-          "Mexico",
-          "Unified Team",
-          "Other"
-        ],
-        "range": [
-          "#e41a1c",
-          "#377eb8",
-          "#4daf4a",
-          "#984ea3",
-          "#ff7f00",
-          "#ffff33",
-          "#a65628",
-          "#f781bf",
-          "#66c2a5",
-          "#8da0cb",
-          "#e78ac3",
-          "#a6d854",
-          "#ffd92f",
-          "#e5c494",
-          "#b3b3b3",
-          "#8dd3c7",
-          "#ffffb3",
-          "#fb8072",
-          "#1b9e77",
-          "#d95f02",
-          "#7570b3",
-          "#fb9a99",
-          "#fccde5",
-          "#b15928",
-          "#d9d9d9"
-        ]
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "tooltip": true,
+        "outerRadius": 200,
+        "innerRadius": 0
       },
-      "legend": {
-        "title": "Country/Team",
-        "symbolLimit": 0,
-        "orient": "right",
-        "direction": "vertical",
-        "columns": 1,
-        "labelLimit": 200,
-        "padding": 10
+      "encoding": {
+        "theta": { "field": "total", "type": "quantitative" },
+        "color": {
+          "field": "country",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "United States",
+              "France",
+              "Australia",
+              "Germany",
+              "Great Britain",
+              "Italy",
+              "Canada",
+              "Spain",
+              "Russia",
+              "Soviet Union",
+              "East Germany",
+              "West Germany",
+              "China",
+              "Japan",
+              "Brazil",
+              "Netherlands",
+              "Sweden",
+              "Belgium",
+              "Romania",
+              "Cuba",
+              "Bulgaria",
+              "Hungary",
+              "Mexico",
+              "Unified Team",
+              "Other"
+            ],
+            "range": [
+              "#e41a1c",
+              "#377eb8",
+              "#4daf4a",
+              "#984ea3",
+              "#ff7f00",
+              "#ffff33",
+              "#a65628",
+              "#f781bf",
+              "#66c2a5",
+              "#8da0cb",
+              "#e78ac3",
+              "#a6d854",
+              "#ffd92f",
+              "#e5c494",
+              "#b3b3b3",
+              "#8dd3c7",
+              "#ffffb3",
+              "#fb8072",
+              "#1b9e77",
+              "#d95f02",
+              "#7570b3",
+              "#fb9a99",
+              "#fccde5",
+              "#b15928",
+              "#d9d9d9"
+            ]
+          },
+          "legend": {
+            "title": "Country/Team",
+            "symbolLimit": 0,
+            "orient": "right",
+            "direction": "vertical",
+            "columns": 1,
+            "labelLimit": 200,
+            "padding": 10
+          }
+        },
+        "tooltip": [
+          { "field": "country", "type": "nominal", "title": "Country" },
+          {
+            "field": "total",
+            "type": "quantitative",
+            "title": "Attendance (%)",
+            "format": ".2f"
+          }
+        ]
       }
     },
-    "tooltip": [
-      { "field": "country", "type": "nominal", "title": "Country" },
-      {
-        "field": "total",
-        "type": "quantitative",
-        "title": "Attendance (%)",
-        "format": ".2f"
+    {
+      "transform": [
+        { "calculate": "'Top Country: ' + datum.country", "as": "topLabel" }
+      ],
+      "mark": {
+        "type": "text",
+        "fontWeight": "bold",
+        "fontSize": 22
+      },
+      "encoding": {
+        "text": { "field": "topLabel" },
+        "color": { "value": "black" },
+        "opacity": {
+          "condition": { "test": "datum.rank == 2", "value": 1 },
+          "value": 0
+        },
+        "x": { "value": 720 },
+        "y": { "value": 470 },
+        "tooltip": null
       }
-    ]
-  },
+    }
+  ],
   "view": { "stroke": "transparent" }
 }
