@@ -37,6 +37,32 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
+      /* Header layout: keep title centered while placing a logo to the left
+         without shifting the title. We center the header-text block and
+         absolutely position the logo inside the header. */
+      .header-inner {
+        position: relative;
+        display: block;
+      }
+
+      .header-inner .header-text {
+        text-align: center;
+      }
+
+      .header-inner .logo-box {
+        position: absolute;
+        left: 75px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 120px;
+      }
+
+      .header-inner .logo-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
       h1 {
         font-size: 2.5rem;
         margin-bottom: 10px;
@@ -47,6 +73,15 @@
         opacity: 0.9;
         max-width: 800px;
         margin: 0 auto;
+      }
+
+      @media (max-width: 600px) {
+        .header-inner {
+          flex-direction: column;
+        }
+        .header-inner .logo-box {
+          width: 160px;
+        }
       }
 
       .intro {
@@ -232,22 +267,19 @@
   <body>
     <div class="container">
       <header>
-        <h1>Olympic Demographic Analysis</h1>
-        <p class="subtitle">
-          Which demographic groups is currently the most prominent in the
-          Olympics?
-        </p>
+        <div class="header-inner">
+          <div class="logo-box">
+            <img src="images/olympics_logo.png" alt="Olympic rings logo" />
+          </div>
+          <div class="header-text">
+            <h1>Olympic Demographic Analysis</h1>
+            <p class="subtitle">
+              Which demographic groups is currently the most prominent in the
+              Olympics?
+            </p>
+          </div>
+        </div>
       </header>
-
-      <!-- Olympic rings image inserted below header -->
-      <div style="display: flex; justify-content: center; margin: 18px 0 8px">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Olympic_rings_without_background.svg"
-          alt="Olympic rings symbol"
-          style="max-width: 160px; width: 12%; height: auto"
-        />
-      </div>
-
       <section class="intro">
         <h2>Exploring Olympic Participation Patterns</h2>
         <p>
