@@ -98,6 +98,29 @@
         align-items: center;
       }
 
+      #scatter_plot .vega-bind {
+        position: absolute;
+        bottom: -15px;
+        right: 18px;
+        z-index: 6;
+        font-size: 0.95rem;
+      }
+
+      /* Place the Vega-Lite bound controls for the pictorial chart below
+         the chart so they don't overlap the axes or the chart title. This
+         keeps the control accessible but visually unobtrusive. */
+      #pictorial_chart .vega-bind {
+        position: absolute;
+        top: auto;
+        bottom: -22px; /* nudge below the chart area */
+        right: 12px;
+        align-items: flex-end;
+        z-index: 10;
+        padding: 6px 8px;
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
+
       .chart-container:hover {
         transform: translateY(-5px);
       }
@@ -211,10 +234,19 @@
       <header>
         <h1>Olympic Demographic Analysis</h1>
         <p class="subtitle">
-          Which demographic group is currently the most prominent in the
+          Which demographic groups is currently the most prominent in the
           Olympics?
         </p>
       </header>
+
+      <!-- Olympic rings image inserted below header -->
+      <div style="display: flex; justify-content: center; margin: 18px 0 8px">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Olympic_rings_without_background.svg"
+          alt="Olympic rings symbol"
+          style="max-width: 160px; width: 12%; height: auto"
+        />
+      </div>
 
       <section class="intro">
         <h2>Exploring Olympic Participation Patterns</h2>
@@ -313,12 +345,12 @@
           <div class="chart-col">
             <div class="chart-container">
               <div
-                id="butterfly_chart"
+                id="scatter_plot"
                 style="display: flex; justify-content: center"
               ></div>
               <div class="chart-description">
                 <p>
-                  This butterfly chart reveals the age distribution of Olympic
+                  This scatter plot reveals the age distribution of Olympic
                   athletes by gender. The visualization shows that the majority
                   of competitors fall between 20-34 years old, with peak
                   participation in the 25-29 age bracket. Interestingly, while
@@ -464,7 +496,7 @@
       vegaEmbed("#chloropleth_map", "js/chloropleth_map.json", {
         renderer: "svg",
       });
-      vegaEmbed("#butterfly_chart", "js/butterfly_chart.json");
+      vegaEmbed("#scatter_plot", "js/scatter_plot.json");
       vegaEmbed(
         "#horizontal_stacked_bar_chart",
         "js/horizontal_stacked_bar_chart.json"

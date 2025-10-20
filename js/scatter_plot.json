@@ -1,9 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 800,
-  "height": 600,
+  "width": 350,
+  "height": 400,
   "data": {
-    "url": "../data/year_age_gender_counts.csv"
+    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/year_age_gender_counts.csv"
   },
 
   "params": [

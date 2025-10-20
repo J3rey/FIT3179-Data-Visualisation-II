@@ -4,7 +4,7 @@
   "width": 450,
   "height": 380,
   "data": {
-    "url": "../data/Male_vs_Female_Percentages_by_Olympic_Year.csv",
+    "url": "https://raw.githubusercontent.com/J3rey/FIT3179-Data-Visualisation-II/refs/heads/main/data/Male_vs_Female_Percentages_by_Olympic_Year.csv",
     "format": {
       "type": "csv",
       "parse": {
@@ -18,7 +18,7 @@
   "params": [
     {
       "name": "year_filter",
-      "value": 2016,
+      "value": 2024,
       "bind": {
         "input": "select",
         "options": [
@@ -107,7 +107,7 @@
         "text": {
           "field": "percentage",
           "type": "quantitative",
-          "format": ".0f"
+          "format": ".2f"
         }
       }
     },
