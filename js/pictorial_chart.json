@@ -1,8 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Gender distribution in Paris 2024 Summer Olympics",
-  "width": 500,
-  "height": 300,
+  "width": 450,
+  "height": 380,
   "data": {
     "values": [
       { "gender": "Male", "percentage": 50.91, "symbol": "♂" },
@@ -28,7 +28,10 @@
       "type": "quantitative",
       "axis": {
         "title": "Percentage (%)",
-        "grid": true
+        "grid": true,
+        "titleFontSize": 13,
+        "titleFontWeight": "bold",
+        "titleColor": "#2a5298"
       },
       "scale": {
         "domain": [0, 100]

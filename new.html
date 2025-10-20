@@ -461,7 +461,9 @@
 
     <script>
       // Embed the visualizations
-      vegaEmbed("#chloropleth_map", "js/chloropleth_map.json");
+      vegaEmbed("#chloropleth_map", "js/chloropleth_map.json", {
+        renderer: "svg",
+      });
       vegaEmbed("#butterfly_chart", "js/butterfly_chart.json");
       vegaEmbed(
         "#horizontal_stacked_bar_chart",

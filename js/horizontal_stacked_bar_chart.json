@@ -40,61 +40,88 @@
       "as": "MedalOrder"
     }
   ],
-  "mark": { "type": "bar", "tooltip": true },
-  "encoding": {
-    "y": {
-      "field": "Country",
-      "type": "nominal",
-      "sort": { "field": "Total Medals", "order": "descending" },
-      "axis": {
-        "title": null,
-        "labelFontSize": 12,
-        "labelLimit": 150
+  "layer": [
+    {
+      "mark": { "type": "bar", "tooltip": true },
+      "encoding": {
+        "y": {
+          "field": "Country",
+          "type": "nominal",
+          "sort": { "field": "Total Medals", "order": "descending" },
+          "axis": {
+            "title": null,
+            "labelFontSize": 12,
+            "labelLimit": 150
+          }
+        },
+        "x": {
+          "aggregate": "sum",
+          "field": "Count",
+          "type": "quantitative",
+          "axis": {
+            "title": "Medal Count",
+            "titleFontSize": 13,
+            "titleFontWeight": "bold",
+            "titleColor": "#2a5298",
+            "labelFontSize": 11,
+            "grid": true,
+            "gridOpacity": 0.3
+          }
+        },
+        "color": {
+          "field": "MedalType",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Bronze", "Silver", "Gold"],
+            "range": ["#cd7f32", "#c0c0c0", "#d4af37"]
+          },
+          "legend": {
+            "title": "Medal Type",
+            "orient": "top",
+            "direction": "horizontal",
+            "titleFontSize": 13,
+            "titleFontWeight": "bold",
+            "titleColor": "#2a5298",
+            "labelFontSize": 12,
+            "symbolSize": 150,
+            "offset": 10
+          }
+        },
+        "order": { "field": "MedalOrder", "sort": "ascending" },
+        "tooltip": [
+          { "field": "Country", "type": "nominal" },
+          { "field": "MedalType", "type": "nominal" },
+          { "field": "Count", "type": "quantitative" },
+          {
+            "field": "Total Medals",
+            "type": "quantitative",
+            "title": "Total Medals"
+          }
+        ]
       }
     },
-    "x": {
-      "aggregate": "sum",
-      "field": "Count",
-      "type": "quantitative",
-      "axis": {
-        "title": "Medal Count",
-        "titleFontSize": 13,
-        "titleFontWeight": "bold",
-        "titleColor": "#2a5298",
-        "labelFontSize": 11,
-        "grid": true,
-        "gridOpacity": 0.3
-      }
-    },
-    "color": {
-      "field": "MedalType",
-      "type": "nominal",
-      "scale": {
-        "domain": ["Bronze", "Silver", "Gold"],
-        "range": ["#cd7f32", "#c0c0c0", "#d4af37"]
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 4
       },
-      "legend": {
-        "title": "Medal Type",
-        "orient": "top",
-        "direction": "horizontal",
-        "titleFontSize": 13,
-        "titleFontWeight": "bold",
-        "titleColor": "#2a5298",
-        "labelFontSize": 12,
-        "symbolSize": 150,
-        "offset": 10
+      "encoding": {
+        "y": {
+          "field": "Country",
+          "type": "nominal",
+          "sort": { "field": "Total Medals", "order": "descending" }
+        },
+        "x": {
+          "aggregate": "sum",
+          "field": "Count",
+          "type": "quantitative"
+        },
+        "text": { "field": "Total Medals", "type": "quantitative" },
+        "detail": [{ "field": "Country" }],
+        "color": { "value": "#333333" }
       }
-    },
-    "order": { "field": "MedalOrder", "sort": "ascending" },
-    "tooltip": [
-      { "field": "Country", "type": "nominal" },
-      { "field": "MedalType", "type": "nominal" },
-      { "field": "Count", "type": "quantitative" },
-      {
-        "field": "Total Medals",
-        "type": "quantitative",
-        "title": "Total Medals"
-      }
-    ]
-  }
+    }
+  ]
 }

@@ -22,9 +22,21 @@
     {
       "name": "showLabels",
       "value": true,
-      "bind": { "input": "checkbox", "name": "Show top 5 countries" }
+      "bind": {
+        "input": "checkbox",
+        "name": "Show top 5 countries                  "
+      }
     }
   ],
+  "config": {
+    "legend": {
+      "layout": {
+        "bottom": {
+          "anchor": "end"
+        }
+      }
+    }
+  },
   "layer": [
     {
       "transform": [
@@ -97,8 +109,8 @@
             "titleColor": "#2a5298",
             "labelFontSize": 11,
             "labelColor": "#333",
-            "orient": "bottom-right",
-            "offset": 0,
+            "orient": "bottom-left",
+            "offset": 10,
             "cornerRadius": 5,
             "padding": 8,
             "strokeColor": "#ccc",
@@ -165,7 +177,7 @@
         "fontWeight": "thin",
         "dy": -8,
         "stroke": "black",
-        "strokeWidth": 0.3,
+        "strokeWidth": 0.4,
         "strokeOpacity": 0.8
       },
       "encoding": {
